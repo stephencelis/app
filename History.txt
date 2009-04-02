@@ -1,3 +1,10 @@
+=== 0.1.1 / 2009-04-02
+
+* 1 major enhancement
+
+  * Gemified!
+
+
 === 0.1.0 / 2009-04-02
 
 * 1 major enhancement

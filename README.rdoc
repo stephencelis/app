@@ -45,8 +45,7 @@ Sugar, sugar, sugar.
   App.apis("flickr")
 
 
-Let's not overcomplicate things, though. <tt>App.apis.flickr</tt> just doesn't
-look right.
+Let's not overdo it, though. <tt>App.apis.flickr</tt> just doesn't look right.
 
 
 == REQUIREMENTS
