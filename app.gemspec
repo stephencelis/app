@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{app}
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Stephen Celis"]
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["History.txt", "Manifest.txt"]
   s.files = ["History.txt", "Manifest.txt", "README.rdoc", "Rakefile", "generators/app_config/app_config_generator.rb", "generators/app_config/templates/app.yml", "init.rb", "install.rb", "lib/app.rb", "test/app_test.rb", "uninstall.rb"]
   s.has_rdoc = true
-  s.rdoc_options = ["--main", "README.txt"]
+  s.rdoc_options = ["--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{app}
   s.rubygems_version = %q{1.3.1}

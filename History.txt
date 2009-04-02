@@ -1,3 +1,10 @@
+=== 0.1.2 / 2009-04-02
+
+* 1 minor enhancement
+
+  * Change README.txt to README.rdoc in gem specification.
+
+
 === 0.1.1 / 2009-04-02
 
 * 1 major enhancement

@@ -2,7 +2,7 @@
 #
 # What would your app be without it? Still an app, but without the App.
 module App
-  VERSION = "0.1.1"
+  VERSION = "0.1.2"
 
   raw_config = File.read Rails.root.join("config", "app.yml")
   @@config = YAML.load(ERB.new(raw_config).result)[Rails.env].freeze
