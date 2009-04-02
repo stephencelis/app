@@ -1,0 +1,11 @@
+History.txt
+Manifest.txt
+README.rdoc
+Rakefile
+generators/app_config/app_config_generator.rb
+generators/app_config/templates/app.yml
+init.rb
+install.rb
+lib/app.rb
+test/app_test.rb
+uninstall.rb

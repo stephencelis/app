@@ -1,0 +1,96 @@
+= App
+
+http://github.com/stephencelis/app
+
+
+== DESCRIPTION
+
+Move the config out of your app, and into App.
+
+Sure, it's been done before, and others will do it again, but this is my way,
+and I like it.
+
+
+== FEATURES/PROBLEMS
+
+* Easy, environmentally-friendly configuration access.
+
+
+For mutability, try acts_as_singleton or KVC:
+
+* http://github.com/stephencelis/acts_as_singleton
+* http://github.com/stephencelis/kvc
+
+
+== SYNOPSIS
+
+App looks for and loads configuration from "config/app.yml", providing a
+namespaced API for access.
+
+  App.config # => {"apis"=>{"flickr"=>{ ... }}
+
+
+Sugar is always sweeter:
+
+  App.config("apis", "flickr") # => App.config["apis"]["flickr"]
+
+
+Who doesn't like sugar?
+
+  App["apis", "flickr"]
+
+
+Sugar, sugar, sugar.
+
+  App.apis("flickr")
+
+
+Let's not overcomplicate things, though. <tt>App.apis.flickr</tt> just doesn't
+look right.
+
+
+== REQUIREMENTS
+
+* Rails 2.3.2 or greater.
+
+
+== INSTALL
+
+Install:
+
+  % script/plugin install git://github.com/stephencelis/app.git
+
+
+Or submodule:
+
+  % git submodule add git://github.com/stephencelis/app.git vendor/plugins/app
+
+
+And generate:
+
+  % script/generate app_config
+
+
+== LICENSE
+
+(The MIT License)
+
+(c) 2009-* Stephen Celis, stephen@stephencelis.com.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy 
+of this software and associated documentation files (the "Software"), to deal 
+in the Software without restriction, including without limitation the rights 
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

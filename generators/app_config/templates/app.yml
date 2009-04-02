@@ -1,0 +1,20 @@
+# Your app config, provided by the App plugin.
+#
+# See "vendor/plugins/app/README.txt" for details.
+---
+development: &development
+  loaded_at: <%= Time.zone.now.iso8601 %>
+  apis:
+    braintree:
+      :login: testapi
+      :password: password1
+
+test:
+  <<: *development
+
+production:
+  loaded_at: <%= Time.zone.now.iso8601 %>
+  apis:
+    braintree:
+      :login: testapi
+      :password: password1
