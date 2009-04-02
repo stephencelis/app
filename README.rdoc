@@ -55,6 +55,13 @@ Let's not overdo it, though. <tt>App.apis.flickr</tt> just doesn't look right.
 
 == INSTALL
 
+=== As a gem:
+
+  % gem install stephencelis-app --source=http://gems.github.com
+
+
+=== As a plugin:
+
 Install:
 
   % script/plugin install git://github.com/stephencelis/app.git
@@ -65,7 +72,7 @@ Or submodule:
   % git submodule add git://github.com/stephencelis/app.git vendor/plugins/app
 
 
-And generate:
+=== Generate:
 
   % script/generate app_config
 
