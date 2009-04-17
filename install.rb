@@ -1,1 +1,1 @@
-STDOUT.puts 'Run `script/generate app_config` to generate "config/app.yml".'
+$stdout.puts 'Run `script/generate app_config` to generate "config/app.yml".'

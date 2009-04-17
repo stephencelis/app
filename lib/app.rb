@@ -1,12 +1,10 @@
 # App is your app.
 #
-# What would your app be without it? Still an app, but without the App.
+# What would your app be without it? Still an app, but without App.
 module App
-  VERSION = "0.1.2"
+  VERSION = "0.2.0"
 
-  raw_config = File.read Rails.root.join("config", "app.yml")
-  @@config = YAML.load(ERB.new(raw_config).result)[Rails.env].freeze
-
+  @@config = {} # Initialize.
   class << self
     # Returns the application configuration hash, as defined in
     # "config/app.yml".
@@ -26,20 +24,10 @@ module App
       @@config if args.empty?
       args.inject(@@config) { |config, arg| config[arg] }
     end
-
-    alias []       config
-    alias __name__ name
-
-    # Returns the name of the web application, which can be overridden in
-    # "config/app.yml".
-    #
-    # To return the name of the module, use <tt>App.__name__</tt>.
-    def name
-      @@name ||= method_missing(:name) || File.basename(Rails.root)
-    end
+    alias [] config
 
     def inspect
-      "#<App: #{config.inspect}>"
+      "#<#{name}: #{config.inspect}>"
     end
 
     private
@@ -47,5 +35,38 @@ module App
     def method_missing(method, *args)
       self[method.to_s, *args] || self[method, *args]
     end
+  end
+
+  begin
+    raw = File.read Rails.root.join("config", "#{name.underscore}.yml")
+    @@config = YAML.load(ERB.new(raw).result)[Rails.env]
+  rescue Errno::ENOENT => e
+    puts '** App: no file "config/app.yml". Run `script/generate app_config`.'
+  end
+end
+
+unless __FILE__ == "(eval)"
+  module App
+    class << self
+      # Returns the name of the web application, which can be overridden in
+      # "config/app.yml".
+      def to_s
+        File.basename(Rails.root)
+      end
+    end
+  end
+
+  # Iterate through other App configs and namespace them.
+  Dir[Rails.root.join("config", "app", "**/*.yml")].sort.each do |config|
+    name = config.gsub(/#{Rails.root.join("config")}\/|\.yml/) {}.classify
+
+    # Recognize all parents.
+    line = name.split("::")
+    line.inject(line.shift) do |parentage, descendant|
+      eval "module #{parentage}; end"
+      "#{parentage}::#{descendant}"
+    end
+
+    eval File.read(__FILE__).sub "module App", "module #{name}"
   end
 end

@@ -1,6 +1,4 @@
-# Your app config, provided by the App plugin.
-#
-# See "vendor/plugins/app/README.txt" for details.
+# An app config, provided by App: http://github.com/stephencelis/app
 ---
 development: &development
   loaded_at: <%= Time.zone.now.iso8601 %>

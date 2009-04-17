@@ -1,3 +1,15 @@
+=== 0.2.0 / 2009-04-17
+
+* 2 major enhancements
+
+  * Option to modular configuration files (from "config/app/**/*.yml").
+  * App.name is now App.to_s (overriding the name is cool, but dangerous).
+
+* 1 minor enhancement
+
+  * Removed superfluous "init" and "uninstall" files (handle load errors more
+    gracefully in "app", and let "script/destroy" do its thing).
+
 === 0.1.2 / 2009-04-02
 
 * 1 minor enhancement

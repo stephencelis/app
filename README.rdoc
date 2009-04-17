@@ -47,6 +47,18 @@ Sugar, sugar, sugar.
 
 Let's not overdo it, though. <tt>App.apis.flickr</tt> just doesn't look right.
 
+If your "app.yml" gets out of hand, modularize:
+
+  # config/app/authenticate.yml
+  ---
+  username: password
+
+  # (elsewhere)
+  App::Authenticate["username"] # => "password"
+
+
+Namespaces avoid collisions.
+
 
 == REQUIREMENTS
 

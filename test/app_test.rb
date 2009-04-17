@@ -5,38 +5,29 @@ require 'active_support/test_case'
 require 'mocha'
 require 'erb'
 
-# Mock
-module App
-  module Rails
-    def self.root
-      File
-    end
-    def self.env
-      "development"
-    end
+# Mock!
+module Rails
+  def self.root
+    self
+  end
+  def self.join(*args)
+    args.shift # No "config" dir, OK?
+    File.expand_path File.join(File.dirname(__FILE__), "fixtures", *args)
+  end
+  def self.env
+    "development"
   end
 end
 
-File.stubs(:read).returns <<-YAML
----
-development:
-  loaded_at: <%= Time.now.iso8601 %>
-  username: Stephen
-  password: frobozz
-  apis:
-    braintree:
-      :login: testapi
-      :password: password1
-YAML
-
+# And load!
 require 'app'
 
 class AppTest < ActiveSupport::TestCase
-  test "different ways of access should return same values" do
-    assert_equal "Stephen", App.config["username"]
-    assert_equal "Stephen", App.config("username")
-    assert_equal "Stephen", App["username"]
-    assert_equal "Stephen", App.username
+  test "should access many ways" do
+    assert_equal "Welcome!", App.config["welcome_message"]
+    assert_equal "Welcome!", App.config("welcome_message")
+    assert_equal "Welcome!", App["welcome_message"]
+    assert_equal "Welcome!", App.welcome_message
 
     assert_equal "testapi", App.config["apis"]["braintree"][:login]
     assert_equal "testapi", App.config("apis", "braintree", :login)
@@ -44,12 +35,26 @@ class AppTest < ActiveSupport::TestCase
     assert_equal "testapi", App.apis("braintree", :login)
   end
 
-  test "ERB should be parsed" do
+  test "should parse ERB" do
     assert_instance_of Time, App.loaded_at
   end
 
-  test "App.name should be inferred" do
+  test "should accept boolean keys" do
+    assert !App.process_payments?
+  end
+
+  test "should infer App.name" do
     File.stubs(:basename).returns "root"
-    assert_equal "root", App.name
+    assert_equal "root", App.to_s
+  end
+
+  test "should namespace configs" do
+    assert_instance_of Module, App::Authenticate
+    assert_equal "frobozz", App::Authenticate["Stephen"]
+  end
+
+  test "should nest multiple levels of configs" do
+    assert_instance_of Module, App::Authenticate::Basic::Config
+    assert_equal :basic, App::Authenticate::Basic::Config.authentication_type
   end
 end
