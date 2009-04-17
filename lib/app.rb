@@ -2,7 +2,7 @@
 #
 # What would your app be without it? Still an app, but without App.
 module App
-  VERSION = "0.2.0"
+  VERSION = "0.2.1"
 
   @@config = {} # Initialize.
   class << self
@@ -39,7 +39,8 @@ module App
 
   begin
     raw = File.read Rails.root.join("config", "#{name.underscore}.yml")
-    @@config = YAML.load(ERB.new(raw).result)[Rails.env]
+    all = YAML.load(ERB.new(raw).result)
+    @@config = all[Rails.env] || all
   rescue Errno::ENOENT => e
     puts '** App: no file "config/app.yml". Run `script/generate app_config`.'
   end

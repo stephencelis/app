@@ -1,3 +1,10 @@
+=== 0.2.1 / 2009-04-17
+
+* 1 minor enhancement
+
+  * Configuration files no longer require scoping to environments.
+
+
 === 0.2.0 / 2009-04-17
 
 * 2 major enhancements
