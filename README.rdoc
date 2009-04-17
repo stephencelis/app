@@ -47,18 +47,6 @@ Sugar, sugar, sugar.
 
 Let's not overdo it, though. <tt>App.apis.flickr</tt> just doesn't look right.
 
-If your "app.yml" gets out of hand, modularize:
-
-  # config/app/authenticate.yml
-  ---
-  username: password
-
-  # (elsewhere)
-  App::Authenticate["username"] # => "password"
-
-
-Namespaces avoid collisions.
-
 
 == REQUIREMENTS
 
@@ -87,6 +75,19 @@ Or submodule:
 === Generate:
 
   % script/generate app_config
+
+
+If your "app.yml" gets out of hand, modularize, like in this heavy-handed
+example:
+
+  % script/generate app_config apis/twitter
+        create  config/app/apis
+        create  config/app/apis/twitter.yml # Configure me!
+
+
+Namespaces avoid collisions:
+
+  App::Apis::Twitter.username
 
 
 == LICENSE

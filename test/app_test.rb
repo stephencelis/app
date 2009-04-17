@@ -57,4 +57,8 @@ class AppTest < ActiveSupport::TestCase
     assert_instance_of Module, App::Authenticate::Basic::Config
     assert_equal :basic, App::Authenticate::Basic::Config.authentication_type
   end
+
+  test "should be frozen" do
+    assert_raise(TypeError) { App.config["loaded_at"] = Time.now }
+  end
 end

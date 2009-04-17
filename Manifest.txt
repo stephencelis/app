@@ -1,4 +1,4 @@
-History.txt
+History.rdoc
 Manifest.txt
 README.rdoc
 Rakefile

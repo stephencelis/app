@@ -1,3 +1,11 @@
+=== 0.2.2 / 2009-04-17
+
+* 2 minor enhancements
+
+  * Remember to better ensure immutability.
+  * Include "README.rdoc" in gemspec.
+
+
 === 0.2.1 / 2009-04-17
 
 * 1 minor enhancement
