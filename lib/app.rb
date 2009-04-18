@@ -39,7 +39,7 @@ module App
 
   begin
     raw = File.read Rails.root.join("config", "#{name.underscore}.yml")
-    all = YAML.load(ERB.new(raw).result)
+    all = YAML.load ERB.new(raw).result
     @@config = all[Rails.env] || all
     @@config.freeze
   rescue Errno::ENOENT => e
@@ -53,7 +53,7 @@ unless __FILE__ == "(eval)"
       # Returns the name of the web application, which can be overridden in
       # "config/app.yml".
       def to_s
-        File.basename(Rails.root)
+        File.basename Rails.root
       end
     end
   end
@@ -63,8 +63,8 @@ unless __FILE__ == "(eval)"
     name = config.gsub(/#{Rails.root.join("config")}\/|\.yml/) {}.classify
 
     # Recognize all parents.
-    line = name.split("::")
-    line.inject(line.shift) do |parentage, descendant|
+    line = name.split "::"
+    line.inject line.shift do |parentage, descendant|
       eval "module #{parentage}; end"
       "#{parentage}::#{descendant}"
     end

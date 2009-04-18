@@ -55,12 +55,33 @@ Let's not overdo it, though. <tt>App.apis.flickr</tt> just doesn't look right.
 
 == INSTALL
 
-=== As a gem:
+=== With a template:
 
-  % gem install stephencelis-app --source=http://gems.github.com
+For existing projects:
+
+  % rake rails:template LOCATION=http://gist.github.com/97629.txt
 
 
-=== As a plugin:
+In new projects:
+
+  % rails newapp -m http://gist.github.com/97629.txt
+
+
+=== Or as a gem:
+
+Configure:
+
+  # config/environment.rb
+  config.gem "stephencelis-app", :lib     => "app",
+                                 :source  => "http://gems.github.com",
+                                 :version => ">= 0.2.2"
+
+And install:
+
+  % sudo rake gems:install
+
+
+=== Or as a plugin:
 
 Install:
 
@@ -72,7 +93,7 @@ Or submodule:
   % git submodule add git://github.com/stephencelis/app.git vendor/plugins/app
 
 
-=== Generate:
+=== Finally, generate:
 
   % script/generate app_config
 
