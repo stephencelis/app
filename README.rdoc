@@ -57,12 +57,12 @@ Let's not overdo it, though. <tt>App.apis.flickr</tt> just doesn't look right.
 
 === With a template:
 
-For existing projects:
+In existing projects:
 
   % rake rails:template LOCATION=http://gist.github.com/97629.txt
 
 
-In new projects:
+For new projects:
 
   % rails newapp -m http://gist.github.com/97629.txt
 

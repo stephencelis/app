@@ -50,8 +50,7 @@ end
 unless __FILE__ == "(eval)"
   module App
     class << self
-      # Returns the name of the web application, which can be overridden in
-      # "config/app.yml".
+      # Returns the name of the web application.
       def to_s
         File.basename Rails.root
       end
