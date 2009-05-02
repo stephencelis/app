@@ -68,6 +68,6 @@ unless __FILE__ == "(eval)"
       "#{parentage}::#{descendant}"
     end
 
-    eval File.read(__FILE__).sub "module App", "module #{name}"
+    eval File.read(__FILE__).sub("module App", "module #{name}")
   end
 end
