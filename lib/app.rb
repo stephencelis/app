@@ -63,7 +63,7 @@ unless __FILE__ == "(eval)"
 
     # Recognize all parents.
     line = name.split "::"
-    line.inject line.shift do |parentage, descendant|
+    line.inject do |parentage, descendant|
       eval "module #{parentage}; end"
       "#{parentage}::#{descendant}"
     end
