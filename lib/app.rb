@@ -4,7 +4,11 @@
 module App
   VERSION = "0.2.2"
 
-  @@config = {} # Initialize.
+  @@config = if Object.const_defined?(:HashWithIndifferentAccess)
+    HashWithIndifferentAccess.new
+  else
+    {}
+  end
   class << self
     # Returns the application configuration hash, as defined in
     # "config/app.yml".
@@ -40,7 +44,7 @@ module App
   begin
     raw = File.read Rails.root.join("config", "#{name.underscore}.yml")
     all = YAML.load ERB.new(raw).result
-    @@config = all[Rails.env] || all
+    @@config.update(all[Rails.env] || all)
     @@config.freeze
   rescue Errno::ENOENT => e
     puts '** App: no file "config/app.yml". Run `script/generate app_config`.'
