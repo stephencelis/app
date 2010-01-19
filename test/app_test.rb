@@ -61,4 +61,8 @@ class AppTest < ActiveSupport::TestCase
   test "should be frozen" do
     assert_raise(TypeError) { App.config["loaded_at"] = Time.now }
   end
+
+  test "should be indifferent to class of key if possible" do
+    assert_equal App['welcome_message'], App[:welcome_message]
+  end
 end
