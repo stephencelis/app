@@ -77,7 +77,7 @@ Configure:
 
 And install:
 
-  % rake gems:install
+  % [sudo] rake gems:install
 
 
 === Or as a plugin:
@@ -110,11 +110,16 @@ Namespaces avoid collisions:
   App::Apis::Twitter.username
 
 
+== Contributors
+
+* Justin Jones (devpuppy)
+
+
 == LICENSE
 
 (The MIT License)
 
-(c) 2009-* Stephen Celis, stephen@stephencelis.com.
+(c) 2009-2010 Stephen Celis, stephen@stephencelis.com.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
