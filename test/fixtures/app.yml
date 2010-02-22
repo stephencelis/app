@@ -1,9 +1,0 @@
----
-development:
-  loaded_at: <%= Time.now.iso8601 %>
-  welcome_message: Welcome!
-  process_payments?: false
-  apis:
-    braintree:
-      :login: testapi
-      :password: password1

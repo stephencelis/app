@@ -1,77 +1,91 @@
-# App is your app.
+# Provides configuration via superclass. Inherit from Configurable, and you
+# have a handy little DSL/class for assigning/accessing your app settings.
 #
-# What would your app be without it? Still an app, but without App.
-module App
-  VERSION = "0.2.2"
+#   class App < Configurable
+#     config.launched_at = Time.now.utc
+#   end
+#
+#   App.launched_at # => 2010-02-21 12:34:56 UTC
+#
+# Configurable classes will warn you when you call undefined settings.
+#
+#   App.typo # => nil
+#   warning: undefined setting `typo' for App:Class
+#
+# If you don't care about these warnings, just redefine the logger.
+#
+#   App.configure do
+#     config.logger = Logger.new nil
+#   end
+class Configurable
+  autoload :Logger,     "logger"
+  autoload :OpenStruct, "ostruct"
 
-  @@config = if Object.const_defined?(:HashWithIndifferentAccess)
-    HashWithIndifferentAccess.new
-  else
-    {}
-  end
+  # Deprecated autoloads.
+  autoload :ERB,        "erb"
+  autoload :YAML,       "yaml"
+
   class << self
-    # Returns the application configuration hash, as defined in
-    # "config/app.yml".
-    #
-    # Follows args through the hash tree. E.g.:
-    #
-    #   App.config("apis", "flickr") # => config_hash["apis"]["flickr"]
-    #
-    # <tt>App.config</tt> is aliased to <tt>App.[]</tt>, so shorten things up:
-    #
-    #   App["apis", "flickr"]
-    #
-    # Or rely on +method_missing+ to make it even shorter (and sweeter):
-    #
-    #   App.apis("flickr")
-    def config(*args)
-      @@config if args.empty?
-      args.inject(@@config) { |config, arg| config[arg] }
+    alias __name__ name
+    undef name
+
+    alias configure class_eval
+
+    def [](key)
+      unless config.respond_to? key
+        logger.warn "warning: undefined setting `#{key}' for #{__name__}:Class"
+      end
+
+      config.send key
     end
-    alias [] config
 
     def inspect
-      "#<#{name}: #{config.inspect}>"
+      config.inspect.sub config.class.name, __name__
+    end
+
+    def logger
+      return config.logger if config.respond_to? :logger
+      @logger ||= defined?(Rails) ? Rails.logger : Logger.new(STDERR)
     end
 
     private
 
-    def method_missing(method, *args)
-      self[method.to_s, *args] || self[method, *args]
+    def config
+      @config ||= OpenStruct.new
     end
-  end
 
-  begin
-    raw = File.read Rails.root.join("config", "#{name.underscore}.yml")
-    all = YAML.load ERB.new(raw).result
-    @@config.update(all[Rails.env] || all)
-    @@config.freeze
-  rescue Errno::ENOENT => e
-    puts '** App: no file "config/app.yml". Run `script/generate app_config`.'
-  end
-end
-
-unless __FILE__ == "(eval)"
-  module App
-    class << self
-      # Returns the name of the web application.
-      def to_s
-        File.basename Rails.root
+    def config=(settings)
+      @config = case settings
+      when String
+        logger.warn "warning: YAML is deprecated (#{__FILE__}:#{__LINE__})"
+        OpenStruct.new YAML.load(ERB.new(settings).result)
+      when Hash
+        OpenStruct.new settings
+      else
+        settings
       end
     end
+
+    def method_missing(method, *args, &block)
+      super if (key = method.to_s).end_with?("=")
+      boolean = key.chomp!("?")
+      value   = self[key]
+      value   = value.call(*args, &block) if value.respond_to?(:call)
+      boolean ? !!value : value
+    end
   end
 
-  # Iterate through other App configs and namespace them.
-  Dir[Rails.root.join("config", "app", "**/*.yml")].sort.each do |config|
-    name = config.gsub(/#{Rails.root.join("config")}\/|\.yml/) {}.classify
+  if defined? Rails
+    class Plugin < Rails::Railtie
+      railtie_name :configurable
 
-    # Recognize all parents.
-    line = name.split "::"
-    line.inject do |parentage, descendant|
-      eval "module #{parentage}; end"
-      "#{parentage}::#{descendant}"
+      initializer "configurable.require_app" do |app|
+        begin
+          require app.root.join "config", "app"
+          require app.root.join "config", "app", Rails.env
+        rescue LoadError
+        end
+      end
     end
-
-    eval File.read(__FILE__).sub("module App", "module #{name}")
   end
 end

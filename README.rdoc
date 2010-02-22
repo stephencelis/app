@@ -1,118 +1,113 @@
 = App
 
-http://github.com/stephencelis/app
-
-
-== DESCRIPTION
-
 Move the config out of your app, and into App.
 
-Sure, it's been done before, and others will do it again, but this is my way,
-and I like it.
+
+== WARNING:
+
+This release is new, improved, and almost completely incompatible with the
+gem formerly known as App. (See "What about YAML?", below.)
 
 
-== FEATURES/PROBLEMS
+== K.
 
-* Easy, environmentally-friendly configuration access.
+=== Rails (3.0)
 
-
-For mutability, try acts_as_singleton or KVC:
-
-* http://github.com/stephencelis/acts_as_singleton
-* http://github.com/stephencelis/kvc
+  % echo 'gem "app"' >> Gemfile
+  % bundle install
+  % rails g configurable
 
 
-== SYNOPSIS
+You now have App config files at config/app. It will generate an override per
+Rails environment.
 
-App looks for and loads configuration from "config/app.yml", providing a
-namespaced API for access.
-
-  App.config # => {"apis"=>{"flickr"=>{ ... }}
-
-
-Sugar is always sweeter:
-
-  App.config("apis", "flickr") # => App.config["apis"]["flickr"]
-
-
-Who doesn't like sugar?
-
-  App["apis", "flickr"]
+  # config/app.rb
+  class App < Configurable
+    config.javascript_expansions = {
+      :prototype     => "prototype"
+      :scriptaculous => %w(effects dragdrop controls)
+    }
+  end
 
 
-Sugar, sugar, sugar.
+Need to update those sources for production?
 
-  App.apis("flickr")
+  # config/app/production.rb
+  App.configure do
+    ajax_lib_base = "http://ajax.googleapis.com/ajax/libs"
 
-
-Let's not overdo it, though. <tt>App.apis.flickr</tt> just doesn't look right.
-
-
-== REQUIREMENTS
-
-* Rails 2.3.2 or greater.
-
-
-== INSTALL
-
-=== With a template:
-
-In existing projects:
-
-  % rake rails:template LOCATION=http://gist.github.com/97629.txt
+    config.javascript_expansions.update({
+      :prototype     => "#{ajax_lib_base}/prototype/1.6.1.0/prototype.js"
+      :scriptaculous => "#{ajax_lib_base}/scriptaculous/1.8.3/scriptaculous.js"
+    })
+  end
 
 
-For new projects:
+=== Ruby
 
-  % rails newapp -m http://gist.github.com/97629.txt
+App can be used in any Ruby application. Just bundle (see "Rails", above, less
+the `rails g`) or install the gem.
 
+Make sure "app" is required in your environment, and define a class from there.
 
-=== Or as a gem:
-
-Configure:
-
-  # config/environment.rb
-  config.gem "app"
-
-
-And install:
-
-  % [sudo] rake gems:install
+  class MyConfig < Configurable
+    config.launched_at = Time.now.utc
+  end
 
 
-=== Or as a plugin:
+== What about YAML?
 
-Install:
+YAML is great, really, but it just wasn't great beyond simple configuration.
 
-  % script/plugin install git://github.com/stephencelis/app.git
+Take that last example. ERB would be required, and still it's cumbersome.
 
-
-Or submodule:
-
-  % git submodule add git://github.com/stephencelis/app.git vendor/plugins/app
+  # app.yml
+  launched_at: <%= Time.now.utc.iso8601 %>
 
 
-=== Finally, generate:
+Forget the ISO 8601 formatting and you'll get a string back, instead.
 
-  % script/generate app_config
+But that's just the surface. Where you're manipulating the primitive objects
+that YAML supports most easily, you could just have stored complex Ruby
+objects: Pathname, Proc, or anything else.
 
+  class App < Configurable
+    config.config_path = Rails.root.join("config")
+    config.uptime = Proc.new { (Time.now.utc - App.launched_at).seconds }
+  end
 
-If your "app.yml" gets out of hand, modularize, like in this heavy-handed
-example:
-
-  % script/generate app_config apis/twitter
-        create  config/app/apis
-        create  config/app/apis/twitter.yml # Configure me!
-
-
-Namespaces avoid collisions:
-
-  App::Apis::Twitter.username
+  App.config_path.join("app") # => #<Pathname:config/app>
+  App.uptime.call             # => 430.198400 seconds
 
 
-== Contributors
+And because these configuration files are just class definitions, you can
+write your own methods, as well.
 
-* Justin Jones (devpuppy)
+  class App < Configurable
+    def self.destroy_sessions!
+      Session.delete_all
+    end
+  end
+
+  App.destroy_sessions! # => 1
+
+
+If Ruby can handle it, so can App.
+
+But OK, OK, there's still an upgrade path:
+
+  class App < Configurable
+    # This must come first.
+    self.config = <<YAML
+  legacy: <%= "configuration" %>
+  YAML
+
+    # config.key = "value"
+  end
+
+
+This is not backwards-compatible. This is only to help ease the transition.
+You will most likely have to upgrade your calls.
 
 
 == LICENSE
