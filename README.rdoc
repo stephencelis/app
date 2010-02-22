@@ -62,22 +62,25 @@ YAML is great, really, but it just wasn't great beyond simple configuration.
 Take that last example. ERB would be required, and still it's cumbersome.
 
   # app.yml
+  ---
   launched_at: <%= Time.now.utc.iso8601 %>
 
 
 Forget the ISO 8601 formatting and you'll get a string back, instead.
 
 But that's just the surface. Where you're manipulating the primitive objects
-that YAML supports most easily, you could just have stored complex Ruby
-objects: Pathname, Proc, or anything else.
+that YAML supports most easily, you could have stored complex Ruby objects:
+Pathname, Proc, or anything else.
 
   class App < Configurable
     config.config_path = Rails.root.join("config")
     config.uptime = Proc.new { (Time.now.utc - App.launched_at).seconds }
+    config.asset_host = ActiveSupport::StringInquirer.new "amazon"
   end
 
   App.config_path.join("app") # => #<Pathname:config/app>
   App.uptime.call             # => 430.198400 seconds
+  App.asset_host.amazon?      # => true
 
 
 And because these configuration files are just class definitions, you can
