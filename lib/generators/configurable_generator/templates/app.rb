@@ -1,4 +1,4 @@
-class App < Configurable
+class App < Configurable # :nodoc:
   # Settings in config/app/* take precedence over those specified here.
   config.name = Rails::Application.instance.class.parent.name
 

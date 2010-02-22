@@ -76,7 +76,7 @@ class Configurable
   end
 
   if defined? Rails
-    class Plugin < Rails::Railtie
+    class Plugin < Rails::Railtie # :nodoc:
       railtie_name :configurable
 
       initializer "configurable.require_app" do |app|

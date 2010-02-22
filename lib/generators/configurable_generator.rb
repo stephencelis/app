@@ -1,4 +1,4 @@
-class ConfigurableGenerator < Rails::Generators::Base
+class ConfigurableGenerator < Rails::Generators::Base # :nodoc:
   def self.source_root
     @_configurable_source_root ||=
       File.expand_path("../#{base_name}/templates", __FILE__)
