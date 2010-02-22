@@ -23,6 +23,11 @@ Rails environment.
 
   # config/app.rb
   class App < Configurable
+    # Settings in config/app/* take precedence over those specified here.
+    config.name = Rails::Application.instance.class.parent.name
+
+    # config.key = "value"
+
     config.javascript_expansions = {
       :prototype     => "prototype"
       :scriptaculous => %w(effects dragdrop controls)
@@ -34,6 +39,10 @@ Need to update those sources for production?
 
   # config/app/production.rb
   App.configure do
+    # Settings specified here will take precedence over those in config/app.rb
+
+    # config.key = "value"
+
     ajax_lib_base = "http://ajax.googleapis.com/ajax/libs"
 
     config.javascript_expansions.update({
@@ -46,11 +55,11 @@ Need to update those sources for production?
 === Ruby
 
 App can be used in any Ruby application. Just bundle (see "Rails", above, less
-the `rails g`) or install the gem.
+the <tt>rails g</tt>) or install the gem.
 
 Make sure "app" is required in your environment, and define a class from there.
 
-  class MyConfig < Configurable
+  class MySite < Configurable
     config.launched_at = Time.now.utc
   end
 
