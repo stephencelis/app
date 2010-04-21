@@ -82,7 +82,7 @@ that YAML supports most easily, you could have stored complex Ruby objects:
 Pathname, Proc, or anything else.
 
   class App < Configurable
-    config.config_path = Rails.root.join("config")
+    config.config_path = Rails.root.join "config"
     config.uptime = Proc.new { (Time.now.utc - App.launched_at).seconds }
     config.asset_host = ActiveSupport::StringInquirer.new "amazon"
   end

@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
-  s.date = "2010-02-21"
+  s.date = "2010-04-20"
 
   s.name = "app"
-  s.version = "0.9.0"
+  s.version = "0.9.1"
   s.summary = "Application configuration."
   s.description = "Move the config out of your app, and into App."
 
