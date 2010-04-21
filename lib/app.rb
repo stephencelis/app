@@ -77,8 +77,6 @@ class Configurable
 
   if defined? Rails
     class Plugin < Rails::Railtie # :nodoc:
-      railtie_name :configurable
-
       initializer "configurable.require_app" do |app|
         begin
           require app.root.join "config", "app"
