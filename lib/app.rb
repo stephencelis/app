@@ -32,9 +32,8 @@ class Configurable
     alias configure class_eval
 
     def [](key)
-      unless config.respond_to? key
+      config.respond_to? key or
         logger.warn "warning: undefined setting `#{key}' for #{__name__}:Class"
-      end
 
       config.send key
     end
