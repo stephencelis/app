@@ -87,10 +87,7 @@ class Configurable
       end
 
       config.before_configuration { ::Configurable::Plugin.load! }
-
-      unless config.cache_classes # Development?
-        config.to_prepare         { ::Configurable::Plugin.load! }
-      end
+      config.to_prepare           { ::Configurable::Plugin.load! }
     end
   end
 end
