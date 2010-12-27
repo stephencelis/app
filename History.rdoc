@@ -1,3 +1,10 @@
+=== 1.0.1 / 2010-12-27
+
+* 1 minor, minor bugfix
+
+  * Generated file relied on old Rails 3.0 API.
+
+
 === 1.0.0 / 2010-12-27
 
 * 2 minor bugfixes
