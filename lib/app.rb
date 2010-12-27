@@ -76,12 +76,20 @@ class Configurable
 
   if defined? Rails
     class Plugin < Rails::Railtie # :nodoc:
-      initializer "configurable.require_app" do |app|
-        begin
-          require app.root.join "config", "app"
-          require app.root.join "config", "app", Rails.env
-        rescue LoadError
+      class << self
+        def load!
+          pathname = Rails.root.join 'config', 'app'
+          require_dependency pathname.to_s
+          require_dependency pathname.join(Rails.env).to_s
+        rescue LoadError => e
+          warn e.message
         end
+      end
+
+      config.before_configuration { ::Configurable::Plugin.load! }
+
+      unless config.cache_classes # Development?
+        config.to_prepare         { ::Configurable::Plugin.load! }
       end
     end
   end
