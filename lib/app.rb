@@ -44,7 +44,9 @@ class Configurable
 
     def logger
       return config.logger if config.respond_to? :logger
-      @logger ||= defined?(Rails) ? Rails.logger : Logger.new(STDERR)
+      return @logger if defined? @logger
+      @logger ||= Rails.logger if defined? Rails
+      @logger ||= Logger.new STDERR
     end
 
     private
@@ -78,11 +80,12 @@ class Configurable
     class Plugin < Rails::Railtie # :nodoc:
       class << self
         def load!
+          require 'active_support/dependencies'
           pathname = Rails.root.join 'config', 'app'
           require_dependency pathname.to_s
           require_dependency pathname.join(Rails.env).to_s
-        rescue LoadError => e
-          warn e.message
+        rescue LoadError, NoMethodError => e
+          Configurable.logger.warn "App: #{e.message}"
         end
       end
 
