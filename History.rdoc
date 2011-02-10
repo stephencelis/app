@@ -1,3 +1,10 @@
+=== 1.0.3 / 2011-02-10
+
+* 1 minor bugfix
+
+  * Fix Ruby 1.8.7/Rails 3.0.4 dependency load issue.
+
+
 === 1.0.2 / 2010-12-27
 
 * 2 minor bugfixes

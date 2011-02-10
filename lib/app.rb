@@ -85,7 +85,6 @@ class Configurable
           require_dependency pathname.to_s
           require_dependency pathname.join(Rails.env).to_s
         rescue LoadError, NoMethodError => e
-          Configurable.logger.warn "App: #{e.message}"
         end
       end
 
