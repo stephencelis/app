@@ -26,20 +26,17 @@ class Configurable
   autoload :YAML,       "yaml"
 
   class << self
-    alias __name__ name
-    undef name
-
     alias configure class_eval
 
     def [](key)
       config.respond_to? key or
-        logger.warn "warning: undefined setting `#{key}' for #{__name__}:Class"
+        logger.warn "warning: undefined setting `#{key}' for #{name}:Class"
 
       config.send key
     end
 
     def inspect
-      config.inspect.sub config.class.name, __name__
+      config.inspect.sub config.class.name, name
     end
 
     def logger
