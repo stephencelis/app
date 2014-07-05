@@ -69,7 +69,9 @@ class Configurable
           pathname = Rails.root.join 'config', 'app'
           require_dependency pathname.to_s
           require_dependency pathname.join(Rails.env).to_s
-        rescue LoadError, NoMethodError
+        rescue NoMethodError => e
+          Rails.logger.warn e
+        rescue LoadError
         end
       end
 
