@@ -21,10 +21,6 @@ class Configurable
   autoload :Logger,     "logger"
   autoload :OpenStruct, "ostruct"
 
-  # Deprecated autoloads.
-  autoload :ERB,        "erb"
-  autoload :YAML,       "yaml"
-
   class << self
     alias configure class_eval
 
@@ -53,15 +49,7 @@ class Configurable
     end
 
     def config=(settings)
-      @config = case settings
-      when String
-        logger.warn "warning: YAML is deprecated (#{__FILE__}:#{__LINE__})"
-        OpenStruct.new YAML.load(ERB.new(settings).result)
-      when Hash
-        OpenStruct.new settings
-      else
-        settings
-      end
+      @config = settings.is_a?(Hash) ? OpenStruct.new(settings) : settings
     end
 
     def method_missing(method, *args, &block)
