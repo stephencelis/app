@@ -17,6 +17,13 @@ class AppTest < ActiveSupport::TestCase
     assert_equal "way cool", App[:tubular]
   end
 
+  test 'should have new methods' do
+    assert_equal true, App.respond_to?(:tubular)
+    assert_equal true, App.respond_to?(:awesome)
+    assert_equal true, App.respond_to?(:mondo)
+    assert_equal false, App.respond_to?(:tubular111)
+  end
+
   test "should return booleans" do
     assert_equal true, App.tubular?
     assert_equal false, App.awesome?

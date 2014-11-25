@@ -42,6 +42,10 @@ class Configurable
       @logger ||= Logger.new STDERR
     end
 
+    def respond_to?(method_sym, include_private = false)
+      config.respond_to?(method_sym) || super
+    end
+
     private
 
     def config
