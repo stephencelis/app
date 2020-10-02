@@ -1,6 +1,6 @@
 = App
 
-Move the config out of your app, and into App.
+Move the config out of your app, and into App. This app is interesting give it a try
 
 
 == WARNING:
